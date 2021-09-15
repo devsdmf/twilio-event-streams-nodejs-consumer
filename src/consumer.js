@@ -5,12 +5,12 @@ const recordProcessor = () => {
   const logger = Logger().getLogger('default');
 
   return {
-    initialize: function(initializeInput, completeCallback) {
+    initialize: (initializeInput, completeCallback) => {
       this.shardId = initializeInput.shardId;
       completeCallback();
     },
 
-    processRecords: function(processRecordsInput, completeCallback) {
+    processRecords: (processRecordsInput, completeCallback) => {
       if (!processRecordsInput || !processRecordsInput.records) {
         completeCallback();
         return;
@@ -39,20 +39,20 @@ const recordProcessor = () => {
       });
     },
 
-    leaseLost: function(leaseLostInput, completeCallback) {
+    leaseLost: (leaseLostInput, completeCallback) => {
       logger.info(`Lease was lost for ShardId: ${this.shardId}`);
       completeCallback();
     },
 
-    shardEnded: function(shardEndedInput, completeCallback) {
+    shardEnded: (shardEndedInput, completeCallback) => {
       logger.info(`ShardId: ${this.shardId} has ended. Will checkpoint now.`);
-      shardEndedInput.checkpointer.checkpoint(function(err) {
+      shardEndedInput.checkpointer.checkpoint((err) => {
         completeCallback();
       });
     },
 
-    shutdownRequested: function(shutdownRequestedInput, completeCallback) {
-      shutdownRequestedInput.checkpointer.checkpoint(function (err) {
+    shutdownRequested: (shutdownRequestedInput, completeCallback) => {
+      shutdownRequestedInput.checkpointer.checkpoint((err) => {
         completeCallback();
       });
     }
